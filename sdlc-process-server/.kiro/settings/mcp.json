@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "sdlc-process": {
+      "command": "/home/ubuntu/Code/sdlc-process-server/.venv/bin/python",
+      "args": ["/home/ubuntu/Code/sdlc-process-server/server.py"],
+      "env": {
+        "SDLC_DB_PATH": "/home/ubuntu/Code/sdlc-process-server/sdlc_traceability.db"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_coverage_report",
+        "get_requirement_status",
+        "get_gaps",
+        "get_vcycle_matrix"
+      ]
+    }
+  }
+}

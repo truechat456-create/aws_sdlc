@@ -1,0 +1,50 @@
+eCall investigation agent — run log
+====================================
+
+Command:
+    export AWS_REGION=us-east-1
+    export BEDROCK_MODEL_ID=<an accessible inference-profile id, e.g. us.anthropic.claude-sonnet-4-5-...>
+    python agent/investigate.py | tee docs/agent_run_log.txt
+
+What ran successfully
+---------------------
+- Agent connected to the ecall-mcp MCP server over stdio.
+- list_tools_sync() loaded all five tools:
+    get_signals, query_ecall_events, get_location_sources, search_spec, save_change_case
+- The Strands event loop started and the model drove tool calls. Observed tool
+  activity (printed by the ToolCallPrinter hook) on a partial run:
+    >>> TOOL CALL: get_signals({})
+    <<< TOOL RESULT: get_signals -> {...PO-2026-041, JIRA-ECALL-1182, CR-2026-553...}
+    >>> TOOL CALL: query_ecall_events({"location_missing": true})
+    <<< TOOL RESULT: query_ecall_events -> {count: 9, ... severe/rollover|tunnel_exit, NO_FIX ...}
+    >>> TOOL CALL: query_ecall_events({})
+    <<< TOOL RESULT: query_ecall_events -> {count: 40, ...}
+
+Blocker (environmental, not code)
+---------------------------------
+The Bedrock model invocation fails intermittently with:
+
+    botocore.errorfactory.AccessDeniedException: ... Converse / ConverseStream ...
+    Model access is denied due to IAM user or service role is not authorized to
+    perform the required AWS Marketplace actions (aws-marketplace:ViewSubscriptions,
+    aws-marketplace:Subscribe) ... try again after 5 minutes.
+
+Diagnosis:
+- The execution role (cfn-workshop-infra-instance-role) can list Bedrock models
+  and a direct boto3 `converse` probe succeeds for some ids, but the very next
+  call to the same id — even in the same process, with no delay — is denied.
+  Access flaps per-request across models, so it is an AWS Marketplace / model-
+  access provisioning issue on the account, not an issue in investigate.py.
+
+Code status:
+- Imports, MCP stdio handshake, tool loading, hooks, and the request path are all
+  verified working. `BedrockModel` is created with region us-east-1 and
+  streaming disabled by default (BEDROCK_STREAMING=1 to re-enable) because this
+  role is also denied ConverseStream.
+
+To complete the run:
+- Enable model access in the Bedrock console (Model access page) for the target
+  model in us-east-1 for this account/role, or use a role with
+  aws-marketplace:ViewSubscriptions / Subscribe, then re-run the command above.
+- The agent will then produce docs/change_case.md ending with
+  "Status: awaiting human approval".

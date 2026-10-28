@@ -1,0 +1,10 @@
+# mower_wifi_bridge parameters (FR-9 WiFi remote start/stop).
+#
+# NFR-6 / FR-9.5: the token is a shared secret and MUST be changed from this
+# placeholder before deployment. Deploy only on a trusted/secured network
+# (TLS is a future FR-10, out of scope for FR-9).
+wifi:
+  port: 8765              # FR-9.1 WebSocket listen port
+  bind_ip: "0.0.0.0"      # bind address
+  token: "CHANGE_ME"      # FR-9.5 shared secret (NFR-6: never hard-code in source)
+  status_rate_hz: 1.0     # FR-9.6 status update rate (1 Hz)

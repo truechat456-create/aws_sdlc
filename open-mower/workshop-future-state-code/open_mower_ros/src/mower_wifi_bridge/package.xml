@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+  mower_wifi_bridge - WiFi remote start/stop bridge (FR-9).
+
+  Host-side ROS node on the Raspberry Pi that exposes a token-authenticated
+  WebSocket interface and relays commands onto the mower's existing ROS
+  command/status interfaces. See
+  workshop-future-state-requirements/16-WiFi-Subsystem.md.
+-->
+<package format="2">
+  <name>mower_wifi_bridge</name>
+  <version>0.0.0</version>
+  <description>WiFi remote start/stop bridge for OpenMower (FR-9): token-authenticated WebSocket server relaying to existing ROS services/topics.</description>
+  <maintainer email="clemens1@familie-elflein.de">Clemens Elflein</maintainer>
+  <license>CC BY-NC-SA 4.0</license>
+
+  <url type="website">https://github.com/ClemensElflein/OpenMower</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- <depend> already implies build + build_export + exec; do not also list
+       the same package under <exec_depend> (catkin treats the redundancy as a
+       package.xml error). -->
+  <depend>rospy</depend>
+  <depend>mower_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <export>
+  </export>
+</package>

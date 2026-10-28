@@ -1,0 +1,12 @@
+# Virtual environment
+/.venv/
+
+# SQLite traceability database (runtime state)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Python
+__pycache__/
+*.py[cod]

@@ -1,0 +1,7 @@
+# CMake / build artifacts
+build/
+*.o
+*.a
+
+# Editor cruft
+*.swp

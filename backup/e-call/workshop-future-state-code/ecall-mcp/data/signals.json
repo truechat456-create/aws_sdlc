@@ -1,0 +1,74 @@
+{
+  "generated_utc": "2026-10-20T09:00:00Z",
+  "note": "All data is synthetic. Posts are anonymized samples from a clustered feed.",
+  "signals": [
+    {
+      "id": "PO-2026-041",
+      "source": "public_opinion_agent",
+      "type": "social_cluster",
+      "theme": "eCall connects but operator has no location",
+      "classification": "safety_critical",
+      "trend": "rising",
+      "post_count": 37,
+      "window_weeks": 6,
+      "window_start": "2026-09-08",
+      "window_end": "2026-10-20",
+      "first_seen": "2026-09-09T14:22:00Z",
+      "last_seen": "2026-10-19T21:05:00Z",
+      "regions": ["DE", "AT", "CH", "IT"],
+      "sample_posts": [
+        {
+          "post_id": "anon-7f3a",
+          "timestamp": "2026-09-11T18:40:00Z",
+          "lang": "en",
+          "text": "Car flipped on the motorway, eCall dialed automatically and the call went through, but the operator kept asking where I was. The system said it had no location. Terrifying."
+        },
+        {
+          "post_id": "anon-2c90",
+          "timestamp": "2026-09-27T07:12:00Z",
+          "lang": "en",
+          "text": "Came out of a long tunnel, lost control, eCall triggered. Emergency line connected fine but they had zero coordinates for us. Had to describe landmarks while injured."
+        },
+        {
+          "post_id": "anon-b115",
+          "timestamp": "2026-10-05T22:48:00Z",
+          "lang": "en",
+          "text": "Why does the automatic crash call work but send 'location not available'? The dispatcher literally could not see where the accident happened."
+        },
+        {
+          "post_id": "anon-d4e7",
+          "timestamp": "2026-10-18T16:30:00Z",
+          "lang": "en",
+          "text": "Rollover after a tunnel. eCall placed the call, voice was clear, but no position was transmitted. Rescue took far longer than it should have."
+        }
+      ]
+    },
+    {
+      "id": "JIRA-ECALL-1182",
+      "source": "jira",
+      "type": "defect",
+      "summary": "eCall received without coordinates",
+      "classification": "safety_critical",
+      "priority": "high",
+      "status": "Open",
+      "created": "2026-10-02T10:15:00Z",
+      "reporter": "psap-integration",
+      "components": ["ecalld", "gnss_if", "msd"],
+      "description": "PSAP integration reports multiple eCall sessions arriving with latitude/longitude = NOT_AVAILABLE (0x7FFFFFFF) and position_trusted cleared. Voice path and MSD transport are healthy; only the position is absent. Correlates with severe crashes shortly after GNSS signal loss (tunnels, rollovers).",
+      "related_signals": ["PO-2026-041"]
+    },
+    {
+      "id": "CR-2026-553",
+      "source": "change_request",
+      "type": "enhancement",
+      "summary": "add vehicle color to MSD",
+      "classification": "cosmetic",
+      "priority": "low",
+      "status": "Backlog",
+      "created": "2026-09-30T13:00:00Z",
+      "requester": "product-marketing",
+      "description": "Requests adding a vehicle color field to the MSD payload to help responders visually identify vehicles. Unrelated to the location-missing issue; included to exercise signal filtering/triage.",
+      "related_signals": []
+    }
+  ]
+}

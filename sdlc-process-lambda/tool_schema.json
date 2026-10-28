@@ -1,0 +1,65 @@
+[
+  {
+    "name": "track_requirement",
+    "description": "Track a new requirement or update an existing one.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "req_id": { "type": "string", "description": "Requirement identifier (e.g., FR-9.1)" },
+        "title": { "type": "string", "description": "Short title of the requirement" },
+        "description": { "type": "string", "description": "Detailed description" },
+        "priority": { "type": "string", "description": "low, medium, high, or critical" }
+      },
+      "required": ["req_id", "title", "description"]
+    }
+  },
+  {
+    "name": "link_commit",
+    "description": "Link a code commit to a requirement for traceability.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "req_id": { "type": "string", "description": "Requirement this commit addresses" },
+        "commit_hash": { "type": "string", "description": "Git commit hash" },
+        "file_path": { "type": "string", "description": "Primary file changed" },
+        "description": { "type": "string", "description": "What this commit implements" }
+      },
+      "required": ["req_id", "commit_hash"]
+    }
+  },
+  {
+    "name": "record_test_result",
+    "description": "Record a test result against a requirement.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "req_id": { "type": "string", "description": "Requirement being verified" },
+        "test_name": { "type": "string", "description": "Name of the test" },
+        "passed": { "type": "boolean", "description": "Whether the test passed" },
+        "details": { "type": "string", "description": "Additional details or failure reason" }
+      },
+      "required": ["req_id", "test_name", "passed"]
+    }
+  },
+  {
+    "name": "get_coverage_report",
+    "description": "Generate a requirements traceability and coverage report.",
+    "inputSchema": { "type": "object", "properties": {} }
+  },
+  {
+    "name": "get_requirement_status",
+    "description": "Query the current status of a specific requirement.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "req_id": { "type": "string", "description": "Requirement identifier to look up" }
+      },
+      "required": ["req_id"]
+    }
+  },
+  {
+    "name": "get_gaps",
+    "description": "Identify requirements missing implementations or tests.",
+    "inputSchema": { "type": "object", "properties": {} }
+  }
+]

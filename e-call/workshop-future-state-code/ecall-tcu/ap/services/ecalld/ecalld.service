@@ -1,0 +1,22 @@
+[Unit]
+Description=eCall TCU daemon (baseline v1)
+Documentation=file:/usr/share/doc/ecalld/ecall_spec.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ecalld /etc/ecalld/ecalld.conf
+Restart=on-failure
+RestartSec=2
+# Harden: eCall needs CAN + UDP only.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+# syslog/journal captures stdout+stderr
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

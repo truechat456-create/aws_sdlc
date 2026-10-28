@@ -1,0 +1,5 @@
+# FR-9 build/verification artifacts
+build-out/
+__pycache__/
+*.pyc
+*.o

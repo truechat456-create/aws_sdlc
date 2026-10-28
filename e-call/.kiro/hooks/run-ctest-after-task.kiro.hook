@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run ctest after each spec task",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "command",
+        "command": "cd workshop-future-state-code/ecall-tcu && cmake -S . -B build >/dev/null && cmake --build build >/dev/null && ctest --test-dir build --output-on-failure"
+      }
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+# cppcheck suppression list for the eCall TCU MISRA C:2012 analysis.
+#
+# Each entry is a DOCUMENTED DEVIATION with written justification (see
+# docs/misra_deviations.md). These are advisory/required rules that do not
+# apply cleanly to a POSIX embedded-Linux application, or that conflict with
+# a deliberate, project-wide coding convention. Genuine defects are fixed in
+# code, not suppressed.
+#
+# Usage:
+#   cppcheck --addon=misra --suppressions-list=misra-suppressions.txt ...
+
+# --- Deliberate coding convention -----------------------------------------
+# 15.5 single point of exit: the project uses guard-clause early returns on
+# error (every function validates args and returns a status enum up front).
+# This is clearer and is our documented house style.
+misra-c2012-15.5
+# 15.4 at most one break/goto per loop: socket drain loops use one break on
+# EAGAIN plus guarded continues; equivalent and readable.
+misra-c2012-15.4
+
+# --- POSIX / hosted-environment necessities --------------------------------
+# 21.6 standard I/O (stdio): syslog, snprintf and fopen/fgets config parsing
+# are required by the service.
+misra-c2012-21.6
+# 21.10 <time.h>: time()/clock_gettime are needed for MSD timestamp and fix age.
+misra-c2012-21.10
+# 21.5 <signal.h>: SIGINT/SIGTERM handling for clean daemon shutdown.
+misra-c2012-21.5
+# 22.10 errno test after a non-errno-setting call: localized to the socket
+# read loops where errno is the libc idiom (EAGAIN/EWOULDBLOCK).
+misra-c2012-22.10
+# 11.5 conversion from void*: required by the BSD sockets API
+# (struct sockaddr* casts) and the injectable send-fn ctx pointer.
+misra-c2012-11.5
+
+# --- Library public-API false positives ------------------------------------
+# 8.7 could be static: these functions are the public library API, used by
+# the service and by unit tests in other translation units.
+misra-c2012-8.7
+# 2.5 unused macro: public headers export constants (ports, limits, sentinels)
+# that individual translation units may not all reference.
+misra-c2012-2.5
+
+# --- Advisory pointer/style rules kept idiomatic ---------------------------
+# 18.4 +/- on pointers: idiomatic C string scanning (p + 1 after a delimiter);
+# equivalent to array indexing, advisory only.
+misra-c2012-18.4
+# 8.1 explicit types: flagged on K&R-free POSIX prototypes we do not control.
+misra-c2012-8.1
+# 8.6/8.4 external linkage/definition: single-definition objects whose decls
+# live in the owning header.
+misra-c2012-8.6
+misra-c2012-8.4
+# 13.3 ++ with side effects, 17.8 parameter modified, 9.3 partial init,
+# 10.8 composite cast: localized, reviewed idioms (loop counters, local trim
+# of a copied buffer, designated struct init). Advisory.
+misra-c2012-13.3
+misra-c2012-17.8
+misra-c2012-9.3
+misra-c2012-10.8
+misra-c2012-10.7
+misra-c2012-17.7

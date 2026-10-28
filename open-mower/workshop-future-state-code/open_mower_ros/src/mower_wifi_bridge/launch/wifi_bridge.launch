@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+  wifi_bridge.launch - start the FR-9 WiFi remote start/stop bridge.
+
+  Loads params/wifi.yaml (FR-9.1 port, FR-9.5 token, FR-9.6 rate) and starts the
+  mower_wifi_bridge node. Gated by OM_NO_WIFI so it can be disabled without
+  editing launch files (see 16-WiFi-Subsystem.md "Deployment").
+-->
+<launch>
+  <node pkg="mower_wifi_bridge"
+        type="mower_wifi_bridge_node"
+        name="mower_wifi_bridge"
+        output="screen"
+        respawn="true"
+        respawn_delay="10"
+        unless="$(optenv OM_NO_WIFI False)">
+    <rosparam file="$(find mower_wifi_bridge)/params/wifi.yaml" command="load" ns=""/>
+    <!-- params are loaded under the 'wifi' namespace in the yaml; remap to private -->
+    <param name="port"           value="$(eval optenv('OM_WIFI_PORT', '8765'))"/>
+    <param name="bind_ip"        value="$(optenv OM_WIFI_BIND_IP 0.0.0.0)"/>
+    <param name="token"          value="$(optenv OM_WIFI_TOKEN CHANGE_ME)"/>
+    <param name="status_rate_hz" value="1.0"/>
+  </node>
+</launch>
